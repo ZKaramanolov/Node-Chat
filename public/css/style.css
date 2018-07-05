@@ -1,0 +1,67 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font: 13px Helvetica, Arial;
+}
+
+div {
+  background: #000;
+  padding: 3px;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+div input {
+  border: 0;
+  padding: 10px;
+  width: 90%;
+  margin-right: .5%;
+}
+
+div button {
+  width: 9%;
+  background: rgb(130, 224, 255);
+  border: none;
+  padding: 10px;
+}
+
+#messages {
+  list-style-type: none;
+  margin: 30px 0 50px;
+  padding: 0;
+  font-family: cursive;
+}
+
+#messages li {
+  word-wrap: break-word;
+  padding: 5px 10px;
+  font-size: 30px;
+}
+
+#messages li:nth-child(odd) {
+  background: #eee;
+}
+
+@media screen and (max-width: 567px){
+    div input {
+        width: 69%;
+        margin-right: 0;
+    }
+
+    div button {
+        width: 29%;
+    }
+
+    #messages {
+        margin: 10px;
+    }
+
+    #messages li {
+        font-size: 20px;
+    }
+}
