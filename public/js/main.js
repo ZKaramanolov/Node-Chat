@@ -1,4 +1,4 @@
-const socket = io('http://192.168.43.34:8000');
+const socket = io('localhost:8000');
 let user;
 
 window.onload = () => {
@@ -7,7 +7,6 @@ window.onload = () => {
         method: 'GET',
         success: (result) => {
             user = JSON.parse(result);
-            console.log(user);
         }
     });
 
@@ -23,7 +22,7 @@ window.onload = () => {
 socket.on('messages', function (msg) {
     $('#messages').empty();
     for (let i = 0; i < msg.length; i++) {
-        const markup = `<li>${msg[i]}</li>`;
+        const markup = `<li>${msg[i].user}: ${msg[i].message}</li>`;
         $('#messages').append(markup);
     }
     $(window).scrollTop(10000);

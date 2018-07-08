@@ -6,11 +6,14 @@ const express = require('express'),
     fs = require('fs'),
     session = require('client-sessions'),
     bodyParser = require('body-parser'),
-    port = process.env.PORT || 8000,
-    msg = [];
+    port = process.env.PORT || 8000;
+
+let msg = JSON.parse(fs.readFileSync(path.join(__dirname, '/data/messages.json')));
 
 app.use(bodyParser.urlencoded({ extended: true }));
+
 app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(session({
     cookieName: 'session',
     secret: 'henlo',
@@ -69,7 +72,6 @@ app.post('/register', function(req, res) {
 
     let idNext = 0;
     for (const index in users) {
-        console.log(index, data.username);
         if (index == data.username) {
             error = true;
             break;
@@ -120,13 +122,28 @@ app.get('/get_session', function (req, res) {
     }
 });
 
+app.get('/clear/:key', function (req, res) {
+    if(req.params.key == 'musaka') {
+        msg = [];
+        fs.writeFile('data/messages.json', JSON.stringify(msg));
+    }
+
+    res.redirect('/chat');
+});
+
 io.on('connection', function (socket) {
   console.log('a user connected');
 
   io.sockets.emit('messages', msg);
 
   socket.on('new message', function (message) {
-    msg.push(message.user + ': ' +  message.msg);
+    msg.push({
+        user: message.user,
+        message: message.msg
+    });
+    
+    fs.writeFile('data/messages.json', JSON.stringify(msg));
+
     io.sockets.emit('messages', msg);
   });
 });
@@ -134,24 +151,3 @@ io.on('connection', function (socket) {
 server.listen(port, '0.0.0.0', function () {
   console.log('Server started on port ' + port)
 });
-
-// {
-//     BagerMan: {
-//         id: 1,
-//         password: 1234,
-//     }
-//
-// }
-// const fileMsgs = [
-//     {
-//         userId: 1,
-//         msg: 'qwdqwdqwdqw',
-//     },
-//     {
-//         userId: 2,
-//         msg: 'wqdqwdqwdqw'
-//     }
-// ];
-//
-// console.log(JSON.stringify(fileMsgs));
-// console.log(JSON.parse(fileMsgs));
