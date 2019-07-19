@@ -88,7 +88,9 @@ app.post('/register', function(req, res) {
             password: data.password,
         }
 
-        fs.writeFile('data/users.json', JSON.stringify(users));
+        fs.writeFile('data/users.json', JSON.stringify(users), (err) => {
+            if (err) err;
+        });
 
         req.session.user = {
             id: idNext,
@@ -125,7 +127,9 @@ app.get('/get_session', function (req, res) {
 app.get('/clear/:key', function (req, res) {
     if(req.params.key == 'musaka') {
         msg = [];
-        fs.writeFile('data/messages.json', JSON.stringify(msg));
+        fs.writeFile('data/messages.json', JSON.stringify(msg), (err) => {
+            if (err) err;
+        });
     }
 
     res.redirect('/chat');
@@ -142,7 +146,9 @@ io.on('connection', function (socket) {
         message: message.msg
     });
     
-    fs.writeFile('data/messages.json', JSON.stringify(msg));
+    fs.writeFile('data/messages.json', JSON.stringify(msg), (err) => {
+        if (err) err;
+    });
 
     io.sockets.emit('messages', msg);
   });
